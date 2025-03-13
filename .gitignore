@@ -1,0 +1,17 @@
+# Node.js
+node--backend/node_modules/
+node--backend/.env
+
+# Python
+ai--backend/venv/
+ai--backend/__pycache__/
+ai--backend/.env
+
+# Client
+
+client/node_modules/
+
+# General
+.DS_Store
+*.log
+*.env
