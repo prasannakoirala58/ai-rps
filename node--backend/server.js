@@ -15,23 +15,31 @@ const checkJwt = auth({
   tokenSigningAlg: 'RS256',
 });
 
-app.post('/play', checkJwt, async (req, res) => {
+app.post('/train', checkJwt, async (req, res) => {
   try {
-    console.log('🎮 Received player move:', req.body);
-
-    const aiResponse = await axios.post(`${AI_SERVER}/play`, req.body);
-    const { ai_move, result, message } = aiResponse.data;
-
-    console.log('🧠 AI Response:', aiResponse.data);
-
-    res.json({ ai_move, result, message });
+    console.log('[TRAIN] Received move:', req.body);
+    const response = await axios.post(`${AI_SERVER}/train`, req.body);
+    console.log('[TRAIN] AI Response:', response.data);
+    res.json(response.data);
   } catch (error) {
-    console.error('❌ Error contacting Python AI backend:', error.message);
-    res.status(500).json({ error: 'Error contacting AI backend' });
+    console.error('Error in /train:', error.message);
+    res.status(500).json({ error: 'Error contacting AI backend (training)' });
+  }
+});
+
+app.post('/battle', checkJwt, async (req, res) => {
+  try {
+    console.log('[BATTLE] Received move:', req.body);
+    const response = await axios.post(`${AI_SERVER}/battle`, req.body);
+    console.log('[BATTLE] AI Response:', response.data);
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error in /battle:', error.message);
+    res.status(500).json({ error: 'Error contacting AI backend (battle)' });
   }
 });
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`🚀 Node server running at http://localhost:${PORT}`);
+  console.log(`Node server running at http://localhost:${PORT}`);
 });
